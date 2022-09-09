@@ -15,12 +15,12 @@ public class SQLHelper {
     }
 
     @SneakyThrows
-    public static String getVerificationCode() {
+    public static DataHelper.VerificationCode getVerificationCode() {
         var codeSQL = "SELECT code FROM auth_code ORDER BY created DESC LIMIT 1";
         try (var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app",
                 "app", "pass")) {
             var result = runner.query(conn, codeSQL, new ScalarHandler<String>());
-            return result;
+            return new DataHelper.VerificationCode(result);
         }
         //или так, когда записываем все строки таблицы в лист и оттуда берем код,
         // или можно записать только последнюю строку указав лимит 1, тогда в result будет BeanHendler
@@ -36,7 +36,7 @@ public class SQLHelper {
     public static void cleanDatabase() {
         try (var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app",
                 "app", "pass")) {
-            runner.execute(conn, "DELETE FROM auth_code");
+            runner.execute(conn, "DELETE FROM auth_codes");
             runner.execute(conn, "DELETE FROM card_transactions");
             runner.execute(conn, "DELETE FROM cards");
             runner.execute(conn, "DELETE FROM users");

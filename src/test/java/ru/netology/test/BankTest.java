@@ -28,14 +28,15 @@ public class BankTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
         var verifyCode = SQLHelper.getVerificationCode();
-        verificationPage.validVerify(verifyCode);
+        verificationPage.validVerify(verifyCode.getCode());
     }
 
     @Test
     void shouldErrorWhenLoginWithRandomUser() {
         LoginPageV1 loginPage = new LoginPageV1();
         var authInfo = DataHelper.getOtherAuthInfo();
-        loginPage.validLogin(authInfo).verifyErrorNotificationVisibility();
+        loginPage.validLogin(authInfo);
+        loginPage.verifyErrorNotificationVisiblity();
     }
 
     @Test
